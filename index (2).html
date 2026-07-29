@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Kaizen Pro Calculator</title>
+    <style>
+        :root {
+            --primary: #003366; --success: #1b5e20; --warning: #e65100;
+            --danger: #c62828; --bg: #f4f7f9;
+        }
+        body { font-family: 'Sarabun', sans-serif; background: var(--bg); padding: 0; margin: 0; color: #333; }
+        
+        /* แถบหัวข้อด้านบน (App Header) */
+        .app-header {
+            background: linear-gradient(135deg, #002244 0%, #003366 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .app-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .app-header p {
+            margin: 5px 0 0 0;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto 40px auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 25px; padding: 0 15px; }
+        
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); padding: 25px; border: 1px solid #e1e4e8; }
+        h3 { color: var(--primary); margin: 0 0 20px 0; font-size: 1.2em; border-left: 5px solid var(--primary); padding-left: 15px; }
+        
+        .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .type-btn { flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; text-align: center; font-weight: bold; background: #fff; transition: 0.2s; min-width: 120px; }
+        .type-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+        .btn-clear { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; background: #e0e0e0; font-weight: bold; color: #666; transition: 0.2s; }
+        .btn-clear:hover { background: #d6d6d6; color: var(--danger); }
+
+        /* 🔥 ปรับเปลี่ยนจาก Grid แนวนอน เป็นแบบแนวตั้ง (Flex Column) เพื่อไม่ให้เบียดกัน */
+        .grid-inputs { display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
+        
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .input-group { margin-bottom: 0px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #555; margin-bottom: 6px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(0,51,102,0.1); }
+        
+        /* สไตล์ฝั่งขวา Result & Dashboard */
+        .main-stat { background: var(--primary); color: white; padding: 25px; border-radius: 16px; text-align: center; margin-bottom: 15px; transition: background 0.3s; }
+        .stat-val { font-size: 2.8rem; font-weight: 800; margin: 5px 0; }
+        
+        .summary-box { background: white; border: 1px solid #e1e4e8; border-radius: 12px; padding: 15px; margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .sum-item { padding: 12px; border-radius: 8px; text-align: center; }
+        .sum-item.before { background: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; }
+        .sum-item.after { background: #e8f5e9; border: 1px solid #c8e6c9; color: #1b5e20; }
+        .sum-title { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+        .sum-val { font-size: 1.15rem; font-weight: bold; }
+
+        .formula-card { background: #fafbfc; border: 1px solid #eaedf0; border-radius: 12px; padding: 20px; }
+        .formula-box { background: white; padding: 15px; border-radius: 8px; border: 1px solid #eef0f2; font-family: 'Sarabun', -apple-system, sans-serif; font-size: 0.85rem; line-height: 1.8; color: #444; }
+        .formula-box b { color: var(--primary); font-weight: 700; }
+        .nowrap { white-space: nowrap; }
+    </style>
+</head>
+<body>
+
+<div class="app-header">
+    <h1>🚀 Kaizen Pro Calculator</h1>
+    <p>ระบบคำนวณและวิเคราะห์มูลค่าโครงการปรับปรุงงานอย่างมืออาชีพ</p>
+</div>
+
+<div class="container">
+    <!-- ฝั่งซ้าย: ฟอร์มกรอกข้อมูล -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+            <h3>ข้อมูลการปรับปรุง</h3>
+            <button class="btn-clear" onclick="clearData()">🧹 Clear Data</button>
+        </div>
+        
+        <div class="toolbar">
+            <div id="btn-time" class="type-btn active" onclick="changeType('time')">🕒 ลดเวลา</div>
+            <div id="btn-cost" class="type-btn" onclick="changeType('cost')">💰 ลดค่าใช้จ่าย</div>
+            <div id="btn-revenue" class="type-btn" onclick="changeType('revenue')">📈 เพิ่มรายได้</div>
+        </div>
+
+        <div id="cost-sub-type" class="input-group" style="margin-bottom: 15px; display: none;">
+            <label>สิ่งที่ประหยัดได้</label>
+            <select id="costCategory" onchange="updateCostLabels()">
+                <option value="general">ค่าใช้จ่ายทั่วไป (บาท)</option>
+                <option value="paper">จำนวนกระดาษ (แผ่น)</option>
+            </select>
+            <p id="paper-hint" style="font-size: 0.75rem; color: #666; margin-top: 4px; display:none;">* คำนวณที่ 0.364 บาทต่อแผ่น</p>
+        </div>
+
+        <div id="wage-section" class="input-group" style="margin-bottom: 15px;">
+            <label>กลุ่มพนักงาน / อัตราค่าแรง</label>
+            <select id="wage" onchange="calc()">
+                <option value="2.516">เจ้าหน้าที่/แผนก (2.516 บาท/น.)</option>
+                <option value="8.666">ฝ่าย/GM (8.666 บาท/น.)</option>
+                <option value="0.966">หน้าร้าน/โรงงาน (0.966 บาท/น.)</option>
+            </select>
+        </div>
+
+        <!-- กล่องกรอกข้อมูลหลักที่ปรับให้แสดงผลแบบแถวแนวตั้งเรียงซ้อนกัน -->
+        <div class="grid-inputs">
+            <div class="input-group">
+                <label id="lbl-asis">Before เวลาก่อนปรับปรุง (นาที)</label>
+                <input type="number" id="asis" placeholder="กรอกตัวเลข..." oninput="calc()">
+            </div>
+            <div class="input-group" id="target-wrapper">
+                <label id="lbl-target">เป้าหมาย (นาที)</label>
+                <input type="number" id="target" placeholder="กรอกตัวเลข..." oninput="calc()">
+            </div>
+            <div class="input-group">
+                <label id="lbl-actual">After เวลาหลังปรับปรุง (นาที)</label>
+                <input type="number" id="actual" placeholder="กรอกตัวเลข..." oninput="calc()">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 15px;"></div>
+
+        <div class="grid-3">
+             <div class="input-group">
+                <label>รอบความถี่</label>
+                <select id="freq" onchange="calc()">
+                    <option value="1">ทำทุกเดือน (รายเดือน)</option>
+                    <option value="0.333">ทำรายไตรมาส (4 ครั้ง/ปี)</option>
+                    <option value="0.083">ทำรายปี (1 ครั้ง/ปี)</option>
+                    <option value="22">ทุกวันทำการ (22 วัน/เดือน)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>ปริมาณงาน (ชิ้น/ครั้ง ต่อรอบ)</label>
+                <input type="number" id="vol" placeholder="กรอกตัวเลข..." oninput="calc()">
+            </div>
+        </div>
+    </div>
+
+    <!-- ฝั่งขวา: สรุปผลลัพธ์และ Dashboard ข้อมูลการเปรียบเทียบ Before-After -->
+    <div class="res-panel">
+        <div class="main-stat" id="stat-card">
+            <span id="res-title" style="letter-spacing: 1px; font-size: 0.85rem; opacity: 0.9;">EFFICIENCY %</span>
+            <div id="resEff" class="stat-val">0%</div>
+            <div id="resSub" style="font-weight: bold; font-size: 1.2rem;">0.00 บาท/เดือน</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="sum-item before">
+                <div class="sum-title" id="lbl-sum-before">Before (นาที/เดือน)</div>
+                <div class="sum-val" id="val-sum-before">0</div>
+            </div>
+            <div class="sum-item after">
+                <div class="sum-title" id="lbl-sum-after">After (นาที/เดือน)</div>
+                <div class="sum-val" id="val-sum-after">0</div>
+            </div>
+        </div>
+
+        <div class="formula-card">
+            <div style="font-weight: bold; color: var(--primary); margin-bottom: 12px;">🔍 วิธีคำนวณ (Calculation Logic)</div>
+            <div class="formula-box" id="logic-box">กรุณากรอกข้อมูลเพื่อแสดงวิธีคำนวณ...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentMode = 'time';
+    const PAPER_PRICE = 0.364; 
+
+    function changeType(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + mode).classList.add('active');
+
+        const config = {
+            time: { 
+                asis: 'Before เวลาก่อนปรับปรุง (นาที)', 
+                target: 'เป้าหมาย (นาที)', 
+                actual: 'After เวลาหลังปรับปรุง (นาที)', 
+                color: '#003366', 
+                title: 'EFFICIENCY %' 
+            },
+            cost: { 
+                asis: 'Before ค่าใช้จ่ายก่อนปรับปรุง (บาท)', 
+                target: 'เป้าหมาย (บาท)', 
+                actual: 'After ค่าใช้จ่ายหลังปรับปรุง (บาท)', 
+                color: '#c62828', 
+                title: 'COST REDUCTION %' 
+            },
+            revenue: { 
+                asis: 'Before รายได้ก่อนปรับปรุง (บาท)', 
+                target: 'เป้าหมาย (บาท)', 
+                actual: 'After รายได้หลังปรับปรุง (บาท)', 
+                color: '#1b5e20', 
+                title: 'REVENUE GROWTH %' 
+            }
+        };
+
+        document.getElementById('lbl-asis').innerText = config[mode].asis;
+        document.getElementById('lbl-target').innerText = config[mode].target;
+        document.getElementById('lbl-actual').innerText = config[mode].actual;
+        
+        document.getElementById('stat-card').style.background = config[mode].color;
+        document.getElementById('res-title').innerText = config[mode].title;
+        
+        document.getElementById('wage-section').style.display = (mode === 'time') ? 'block' : 'none';
+        document.getElementById('cost-sub-type').style.display = (mode === 'cost') ? 'block' : 'none';
+        
+        const targetWrapper = document.getElementById('target-wrapper');
+        if (mode === 'revenue') {
+            targetWrapper.style.display = 'block'; 
+        } else {
+            targetWrapper.style.display = 'none';
+            document.getElementById('target').value = '';
+        }
+
+        if(mode === 'cost') updateCostLabels();
+        calc();
+    }
+
+    function updateCostLabels() {
+        const cat = document.getElementById('costCategory').value;
+        const hint = document.getElementById('paper-hint');
+        if (cat === 'paper') {
+            document.getElementById('lbl-asis').innerText = "Before จำนวนก่อนปรับปรุง (แผ่น)";
+            document.getElementById('lbl-actual').innerText = "After จำนวนหลังปรับปรุง (แผ่น)";
+            hint.style.display = 'block';
+        } else {
+            document.getElementById('lbl-asis').innerText = "Before ค่าใช้จ่ายก่อนปรับปรุง (บาท)";
+            document.getElementById('lbl-actual').innerText = "After ค่าใช้จ่ายหลังปรับปรุง (บาท)";
+            hint.style.display = 'none';
+        }
+        calc();
+    }
+
+    function clearData() {
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => input.value = '');
+        calc(); 
+    }
+
+    function calc() {
+        const asis = parseFloat(document.getElementById('asis').value) || 0;
+        const target = parseFloat(document.getElementById('target').value) || 0;
+        const actual = parseFloat(document.getElementById('actual').value) || 0;
+        const vol = parseFloat(document.getElementById('vol').value) || 0;
+        const freq = parseFloat(document.getElementById('freq').value);
+        const wage = parseFloat(document.getElementById('wage').value);
+        const costCat = document.getElementById('costCategory').value;
+
+        let eff = 0;
+        let monthly = 0;
+        let logic = '';
+        
+        let beforeMonthlyDisplay = '';
+        let afterMonthlyDisplay = '';
+
+        if (currentMode === 'time') {
+            eff = asis > 0 ? ((asis - actual) / asis) * 100 : 0;
+            let cashPerUnit = (asis - actual) * wage;
+            monthly = cashPerUnit * (vol * freq);
+
+            let totalMinutesBefore = asis * vol * freq;
+            let totalMinutesAfter = actual * vol * freq;
+
+            beforeMonthlyDisplay = `${totalMinutesBefore.toLocaleString(undefined, {maximumFractionDigits:1})} นาที/เดือน`;
+            afterMonthlyDisplay = `${totalMinutesAfter.toLocaleString(undefined, {maximumFractionDigits:1})} นาที/เดือน`;
+
+            document.getElementById('lbl-sum-before').innerText = "Before (นาที/เดือน)";
+            document.getElementById('lbl-sum-after').innerText = "After (นาที/เดือน)";
+
+            logic = `1. % Eff: ((${asis}-${actual}) / ${asis}) × 100 = <b>${eff.toFixed(2)}%</b><br>` +
+                    `2. ผลรวมเวลาเดิม: ${asis} น. × (${vol} ชิ้น × ${freq} รอบ) = <b>${totalMinutesBefore.toLocaleString()} นาที/เดือน</b><br>` +
+                    `3. ผลรวมเวลาใหม่: ${actual} น. × (${vol} ชิ้น × ${freq} รอบ) = <b>${totalMinutesAfter.toLocaleString()} นาที/เดือน</b><br>` +
+                    `4. คิดเป็นมูลค่าเทียบเท่าเงิน (Equivalent Cash) ที่ประหยัดได้:<br>` +
+                    ` &nbsp;&nbsp;&nbsp;${cashPerUnit.toFixed(2)} บ. × (${vol} × ${freq}) = <b>${monthly.toLocaleString()} บ./เดือน</b>`;
+        } 
+        else if (currentMode === 'cost') {
+            eff = asis > 0 ? ((asis - actual) / asis) * 100 : 0;
+            
+            document.getElementById('lbl-sum-before').innerText = "Before (บาท/เดือน)";
+            document.getElementById('lbl-sum-after').innerText = "After (บาท/เดือน)";
+
+            if (costCat === 'paper') {
+                let costBefore = asis * PAPER_PRICE * vol * freq;
+                let costAfter = actual * PAPER_PRICE * vol * freq;
+                monthly = costBefore - costAfter;
+
+                beforeMonthlyDisplay = `${costBefore.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท/เดือน`;
+                afterMonthlyDisplay = `${costAfter.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท/เดือน`;
+
+                logic = `1. % Paper Saved: ((${asis}-${actual}) / ${asis}) × 100 = <b>${eff.toFixed(2)}%</b><br>` +
+                        `2. ค่ากระดาษเดิม: (${asis} แผ่น × ${PAPER_PRICE} บ.) × (${vol}×${freq}) = <b>${costBefore.toLocaleString()} บ./เดือน</b><br>` +
+                        `3. ค่ากระดาษใหม่: (${actual} แผ่น × ${PAPER_PRICE} บ.) × (${vol}×${freq}) = <b>${costAfter.toLocaleString()} บ./เดือน</b><br>` +
+                        `4. สรุปต้นทุนที่ประหยัดได้สุทธิ: <b>${monthly.toLocaleString()} บ./เดือน</b>`;
+            } else {
+                let costBefore = asis * vol * freq;
+                let costAfter = actual * vol * freq;
+                monthly = costBefore - costAfter;
+
+                beforeMonthlyDisplay = `${costBefore.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท/เดือน`;
+                afterMonthlyDisplay = `${costAfter.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท/เดือน`;
+
+                logic = `1. % Cost Saved: ((${asis}-${actual}) / ${asis}) × 100 = <b>${eff.toFixed(2)}%</b><br>` +
+                        `2. ค่าใช้จ่ายเดิม: ${asis} บ. × (${vol} ครั้ง × ${freq} รอบ) = <b>${costBefore.toLocaleString()} บ./เดือน</b><br>` +
+                        `3. ค่าใช้จ่ายใหม่: ${actual} บ. × (${vol} ครั้ง × ${freq} รอบ) = <b>${costAfter.toLocaleString()} บ./เดือน</b><br>` +
+                        `4. สรุปต้นทุนที่ประหยัดได้สุทธิ: <b>${monthly.toLocaleString()} บ./เดือน</b>`;
+            }
+        } 
+        else {
+            document.getElementById('lbl-sum-before').innerText = "Before (บาท/เดือน)";
+            document.getElementById('lbl-sum-after').innerText = "After (บาท/เดือน)";
+
+            let revBefore = asis * vol * freq;
+            let revAfter = actual * vol * freq;
+            monthly = revAfter - revBefore;
+
+            beforeMonthlyDisplay = `${revBefore.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท/เดือน`;
+            afterMonthlyDisplay = `${revAfter.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท/เดือน`;
+
+            if (asis === 0) {
+                document.getElementById('res-title').innerText = "TARGET ACHIEVED %";
+                eff = target > 0 ? (actual / target) * 100 : 100.00;
+                logic = `1. % Target Achieved: (${actual} / ${target}) × 100 = <b>${eff.toFixed(2)}%</b><br>`;
+            } else {
+                document.getElementById('res-title').innerText = "REVENUE GROWTH %";
+                eff = ((actual - asis) / asis) * 100;
+                logic = `1. % Revenue Growth: ((${actual}-${asis}) / ${asis}) × 100 = <b>${eff.toFixed(2)}%</b><br>`;
+            }
+            logic += `2. รายได้เดิม: ${asis.toLocaleString()} บ. × (${vol} ครั้ง × ${freq} รอบ) = <b>${revBefore.toLocaleString()} บ./เดือน</b><br>` +
+                     `3. รายได้ใหม่: ${actual.toLocaleString()} บ. × (${vol} ครั้ง × ${freq} รอบ) = <b>${revAfter.toLocaleString()} บ./เดือน</b><br>` +
+                     `4. รายได้ที่เปลี่ยนแปลงสุทธิประจำเดือน: <b>${monthly.toLocaleString()} บ./เดือน</b>`;
+        }
+
+        document.getElementById('resEff').innerText = eff.toFixed(2) + "%";
+        document.getElementById('resSub').innerText = (monthly >= 0 ? "" : "-") + Math.abs(monthly).toLocaleString(undefined, {minimumFractionDigits:2}) + " บาท/เดือน";
+        document.getElementById('val-sum-before').innerText = beforeMonthlyDisplay;
+        document.getElementById('val-sum-after').innerText = afterMonthlyDisplay;
+        document.getElementById('logic-box').innerHTML = logic;
+    }
+
+    window.onload = function() {
+        changeType('time');
+    };
+</script>
+
+</body>
+</html>
