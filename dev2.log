@@ -1,0 +1,79 @@
+
+  vinext dev  (Vite 8.0.13)
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+  [32m➜[39m  [1mDebug[22m:   [2m[33mhttp://localhost:[1m3000[22m[2m/__debug[39m[22m
+ GET / 200 in 2.3s (compile: 1785376390.2s, render: 2.2s)
+ GET / 200 in 148ms (compile: 1785376390.2s, render: 85ms)
+[2m08:53:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mnext/link[32m[39m
+[2m08:53:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m08:53:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mInvalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m08:53:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mInvalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m08:53:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mTypeError: Cannot read properties of null (reading 'useState')
+    at exports.useState (http://localhost:3000/node_modules/.vite/deps/react.js?v=261ca064:748:30)
+    at Link (http://localhost:3000/node_modules/.vite/deps/next_link.js?v=b611bdc2:1207:58)
+    at Object.react_stack_bottom_frame (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:12868:12)
+    at renderWithHooks (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:4213:19)
+    at updateForwardRef (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:5396:16)
+    at beginWork (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:6204:21)
+    at runWithFiberInDEV (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:851:66)
+    at performUnitOfWork (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:8429:92)
+    at workLoopSync (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:8325:37)
+    at renderRootSync (http://localhost:3000/node_modules/.vite/deps/react-dom_client.js?v=813f6984:8309:6)
+[2m08:53:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in a React component:
+
+    at Link (http://localhost:3000/node_modules/.vite/deps/next_link.js?v=b611bdc2:1201:57)
+    at header (<anonymous>)
+    at main (<anonymous>)
+    at Storefront (http://localhost:3000/app/storefront.tsx:92:28)
+    at Home [Server] (<anonymous>)
+    at AwaitAppRenderDependencies [Server] (<anonymous>)
+    at Slot (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/slot.js?v=813f6984:42:17)
+    at LayoutSegmentProvider (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/layout-segment-context.js?v=813f6984:32:34)
+    at RedirectErrorBoundary (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/error-boundary.js?v=813f6984:56:3)
+    at RedirectBoundary (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/error-boundary.js?v=813f6984:86:29)
+    at Children (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/slot.js?v=813f6984:64:17)
+    at body (<anonymous>)
+    at html (<anonymous>)
+    at RootLayout [Server] (<anonymous>)
+    at default (about://React/Server/C:/Users/vetitwon/Desktop/Chat%20Cowork/Project%20excel/chicken-rice-queue/app/layout.tsx?1:73:26)
+    at default (about://React/Server/C:/Users/vetitwon/Desktop/Chat%20Cowork/Project%20excel/chicken-rice-queue/app/layout.tsx?1:73:26)
+    at Slot (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/slot.js?v=813f6984:42:17)
+    at LayoutSegmentProvider (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/layout-segment-context.js?v=813f6984:32:34)
+    at Slot (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/slot.js?v=813f6984:42:17)
+    at NavigationCommitSignal (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/server/app-browser-navigation-controller.js?v=813f6984:184:36)
+    at RedirectErrorBoundary (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/error-boundary.js?v=813f6984:56:3)
+    at RedirectBoundary (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/error-boundary.js?v=813f6984:86:29)
+    at DevRecoveryBoundary (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/shims/error-boundary.js?v=813f6984:268:3)
+    at BrowserRoot (http://localhost:3000/node_modules/.pnpm/vinext@0.0.50_@vitejs+plugi_e4ae96fc73b3a0140a6915388c4913a8/node_modules/vinext/dist/server/app-browser-entry.js?v=813f6984:209:24)
+ GET / 200 in 85ms (compile: 1785376390.2s, render: 41ms)
+ GET /api/menu 200 in 92ms
+ GET /api/menu 200 in 35ms
+ POST /api/orders 201 in 38ms
+ GET /api/orders/c5776432-c4c5-4926-97fb-ed70633878fd?token=44c1287b283f48bb8bd2b8eefd6ec202 200 in 26ms
+ POST /api/admin/login 200 in 25ms
+ GET /api/admin/orders?scope=active 200 in 24ms
+ PATCH /api/admin/orders/c5776432-c4c5-4926-97fb-ed70633878fd 200 in 27ms
+ GET /api/orders/c5776432-c4c5-4926-97fb-ed70633878fd?token=44c1287b283f48bb8bd2b8eefd6ec202 200 in 26ms
+ GET /api/admin/summary 200 in 27ms
+[2m08:55:03[22m [36m[1m[vite][22m[39m [34m[2m(rsc)[22m[39m [32mhmr update [39m[2m/app/globals.css[22m
+[2m08:55:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/app/globals.css?direct[22m
+[2m08:55:18[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/app/globals.css?direct[22m
+[2m08:56:59[22m [36m[1m[vite][22m[39m [34m[2m(rsc)[22m[39m [32mhmr update [39m[2m/app/globals.css[22m
+[2m08:56:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/app/globals.css?direct[22m
+[2m08:57:03[22m [36m[1m[vite][22m[39m [34m[2m(rsc)[22m[39m [32mhmr update [39m[2m/app/globals.css[22m
+[2m08:57:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/app/globals.css?direct[22m
+[2m08:57:49[22m [36m[1m[vite][22m[39m [32m.openai/hosting.json changed, restarting server...[39m
+[2m08:57:54[22m [36m[1m[vite][22m[39m server restarted.
+ GET / 200 in 2.0s (compile: 1785376390.2s, render: 1.9s)
+ GET /api/menu 200 in 79ms
+[2m08:59:21[22m [36m[1m[vite][22m[39m [34m[2m(rsc)[22m[39m [32mhmr update [39m[2m/app/globals.css[22m
+[2m08:59:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/app/globals.css?direct[22m
